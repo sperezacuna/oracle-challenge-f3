@@ -1,0 +1,5 @@
+*.pt
+env/
+models/temp/
+results/temp/
+__pycache__
