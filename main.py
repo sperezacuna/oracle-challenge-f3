@@ -1,6 +1,9 @@
 import os
 import sys
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))
+import getopt
+
+from app.common.dataload import IncrementalDataset
 
 def help():
   print("Usage: main.py [TODO]\n")
@@ -19,6 +22,10 @@ def main(argv):
   except getopt.error as err:
     print("[!] " + str(err))
     sys.exit(1)
+  dataset = IncrementalDataset(os.path.join(os.path.dirname(__file__), "data/raw/training_set.csv"),
+                               os.path.join(os.path.dirname(__file__), "data/raw/testing_set.csv"))
+  dataset.show()
+  print("Done")
 
 if __name__ == "__main__":
   main(sys.argv[1:])
