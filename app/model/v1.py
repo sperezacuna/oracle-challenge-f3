@@ -33,7 +33,7 @@ class PairSampleLabellerModel():
     self.model.add(Activation('sigmoid'))
     optimizer = Adam(learning_rate=0.02)
     self.amplify_lr = LearningRateScheduler(scheduler)
-    self.model.compile(optimizer=optimizer, loss='categorical_crossentropy', metrics=['accuracy'])
+    self.model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=['accuracy'])
 
   def predict(self, X):
     return self.model.predict(X, verbose=1)
