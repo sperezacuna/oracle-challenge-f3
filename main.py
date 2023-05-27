@@ -29,8 +29,7 @@ def main(argv):
                                os.path.join(os.path.dirname(__file__), "data/raw/testing_set.csv"))
   dataset.show()
   print("Done")
-  model = PairSampleLabellerModel()
-  results = performIncrementalInferenceLearning(dataset, model)
+  results = performIncrementalInferenceLearning(dataset)
   results_dir = os.path.join(os.path.dirname(__file__), f'results/default-model')
   if not os.path.exists(results_dir):
     os.makedirs(results_dir)

@@ -4,6 +4,8 @@ import pandas as pd
 import numpy as np
 from app.common.transform import cleanDataframe, calculateLabels
 
+from app.config import DATASET_PROPERTIES
+
 class IncrementalDataset():
   def __init__(self, training_csv, testing_csv):
     training_dataframe = pd.read_csv(training_csv, index_col=0, parse_dates=['Time'])
@@ -22,7 +24,7 @@ class IncrementalDataset():
     print(self.dataset)
   def getBatch(self, last_idx):
     X, Y = [], []
-    for i in range(0, last_idx-2):
+    for i in range(last_idx-DATASET_PROPERTIES['window'], last_idx-2):
       x_i = np.column_stack((self.dataset.iloc[i]['Time'], self.dataset.iloc[i]['Open'], self.dataset.iloc[i]['High'], self.dataset.iloc[i]['Low'], self.dataset.iloc[i]['Close'], self.dataset.iloc[i]['Volume'])).flatten()
       y_i = self.dataset.iloc[i]['label']
       X.append(x_i)

@@ -9,24 +9,23 @@ from keras import regularizers
 from app.config import DATASET_PROPERTIES
 
 def scheduler(epoch, lr):
-  if epoch < 30:
-    return lr
-  elif epoch == 30:
+  if epoch == 29:
     return 0.005
   else:
     if lr < 0.2:
       return lr * 1.0001
     else:
       return lr
+    
 
 class PairSampleLabellerModel():
   def __init__(self):
     self.model = Sequential()
-    self.model.add(Dense(500, input_dim=6, activity_regularizer=regularizers.l2(0.01)))
+    self.model.add(Dense(128, input_dim=6, activity_regularizer=regularizers.l2(0.01)))
     self.model.add(GaussianNoise(0.01))
     self.model.add(BatchNormalization()) 
     self.model.add(LeakyReLU()) 
-    self.model.add(Dense(16, activity_regularizer=regularizers.l2(0.01)))
+    self.model.add(Dense(64, activity_regularizer=regularizers.l2(0.01)))
     self.model.add(Flatten())
     self.model.add(BatchNormalization()) 
     self.model.add(LeakyReLU())
@@ -34,7 +33,7 @@ class PairSampleLabellerModel():
     self.model.add(Activation('sigmoid'))
     optimizer = Adam(learning_rate=0.02)
     self.amplify_lr = LearningRateScheduler(scheduler)
-    self.model.compile(optimizer=optimizer, loss='mse', metrics=['accuracy'])
+    self.model.compile(optimizer=optimizer, loss='categorical_crossentropy', metrics=['accuracy'])
 
   def predict(self, X):
     return self.model.predict(X, verbose=1)
