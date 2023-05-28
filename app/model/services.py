@@ -33,5 +33,5 @@ def performIncrementalInferenceLearning(dataset, model):
       print(f'> {(false_negatives/(false_positives+false_negatives)*100):.4f}% of errors are false negatives')
       print(f'> {(false_positives/(false_positives+false_negatives)*100):.4f}% of errors are false positives')
     # pictogram += "✅" if out==testingLabel else "❌"
-    print('' + pictogram)
+    # print('' + pictogram)
   return all_preds
