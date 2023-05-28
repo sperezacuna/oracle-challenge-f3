@@ -4,45 +4,39 @@ from keras.layers.core import Dense, Dropout, Activation, Flatten, Permute, Resh
 from keras.layers import Convolution1D, MaxPooling1D, GlobalAveragePooling1D, GlobalMaxPooling1D, RepeatVector, AveragePooling1D, LeakyReLU, BatchNormalization, GaussianNoise
 from keras.callbacks import ModelCheckpoint, LearningRateScheduler
 from keras.optimizers import Adam
+from keras.metrics import BinaryAccuracy
+from keras.losses import BinaryCrossentropy
+from keras import Input
 from keras import regularizers
 
-from app.config import DATASET_PROPERTIES
-
-def scheduler(epoch, lr):
-  if epoch == 29:
-    return 0.005
-  else:
-    if lr < 0.2:
-      return lr * 1.0001
-    else:
-      return lr
-    
+from app.config import PARAMETERS
 
 class PairSampleLabellerModel():
   def __init__(self):
     self.model = Sequential()
-    self.model.add(Dense(128, input_dim=6, activity_regularizer=regularizers.l2(0.01)))
-    self.model.add(GaussianNoise(0.01))
-    self.model.add(BatchNormalization()) 
-    self.model.add(LeakyReLU()) 
-    self.model.add(Dense(64, activity_regularizer=regularizers.l2(0.01)))
-    self.model.add(Flatten())
+    self.model.add(Input(shape=(PARAMETERS['label-lookahead'],6,)))
+    self.model.add(Dense(64))
+    self.model.add(GaussianNoise(0.05))
     self.model.add(BatchNormalization()) 
     self.model.add(LeakyReLU())
-    self.model.add(Dense(1)) 
-    self.model.add(Activation('sigmoid'))
-    optimizer = Adam(learning_rate=0.02)
-    self.amplify_lr = LearningRateScheduler(scheduler)
-    self.model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=['accuracy'])
+    self.model.add(Dropout(0.5))
+    self.model.add(Dense(16))
+    self.model.add(GaussianNoise(0.05))
+    self.model.add(BatchNormalization()) 
+    self.model.add(LeakyReLU())
+    self.model.add(Dense(1, activation='sigmoid'))
+    self.model.compile(
+      optimizer=Adam(learning_rate=0.02),
+      loss=BinaryCrossentropy(),
+      metrics=[BinaryAccuracy()]
+    )
 
   def predict(self, X):
-    return self.model.predict(X, verbose=1)
+    return self.model.predict(X, verbose=0)
 
-  def fit(self, samples, labels, numEpochs):
-    history = self.model.fit(samples, labels, 
-              epochs = numEpochs, 
-              batch_size = DATASET_PROPERTIES['batch-size'],
-              verbose=1, 
-              callbacks=[self.amplify_lr],
+  def fit(self, samples, labels, numEpochs, verbose):
+    return self.model.fit(samples, labels,
+              epochs = numEpochs,
+              batch_size = PARAMETERS['batch-size'],
+              verbose=verbose,
               shuffle=False)
-    return history

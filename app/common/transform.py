@@ -5,9 +5,9 @@ from sklearn.impute import IterativeImputer
 
 def cleanDataframe(dataframe):
   dataframe['label'] = dataframe['label'].astype('boolean')
-  log(dataframe)
+  # log(dataframe)
   dataframe = deleteOutliers(dataframe)
-  log(dataframe)
+  # log(dataframe)
   try:
     assert dataframe.apply(isValid, axis=1).all(), "[!] Data has errors"
   except AssertionError as error:
@@ -22,7 +22,7 @@ def cleanDataframe(dataframe):
     dataframe = dataframe.apply(fixSample, axis=1)
     print("Finished naive correction of errors")
   assert dataframe.apply(isValid, axis=1).all(), "[!] Data has errors"
-  log(dataframe)
+  # log(dataframe)
   return dataframe
 
 def calculateLabels_prev(dataframe):
@@ -52,6 +52,15 @@ def calculateLabels(dataframe):
   for i in range(len(dataframe)-3, len(dataframe)):
     dataframe.loc[i, 'label'] = False
   return dataframe
+
+def createFullDataset(training_dataframe, testing_dataframe, generateLabels):
+  dataset = pd.concat([training_dataframe, testing_dataframe], ignore_index=True)
+  dataset['Time'] = dataset['Time'].apply(lambda x: x.date().toordinal())
+  if generateLabels:
+    dataset = calculateLabels(dataset)
+    print("Finished setting correct labels")
+  print("Finished merging datasets")
+  return dataset
 
 def deleteOutliers(dataframe):
   for indicator in ["Open", "High", "Low", "Close"]:

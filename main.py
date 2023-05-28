@@ -2,6 +2,7 @@ import os
 import sys
 import json
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2' 
 import getopt
 
 from app.common.dataload import IncrementalDataset
@@ -27,8 +28,6 @@ def main(argv):
     sys.exit(1)
   dataset = IncrementalDataset(os.path.join(os.path.dirname(__file__), "data/raw/training_set.csv"),
                                os.path.join(os.path.dirname(__file__), "data/raw/testing_set.csv"))
-  dataset.show()
-  print("Done")
   results = performIncrementalInferenceLearning(dataset)
   results_dir = os.path.join(os.path.dirname(__file__), f'results/default-model')
   if not os.path.exists(results_dir):
