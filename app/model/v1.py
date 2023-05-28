@@ -1,13 +1,10 @@
 from keras.models import Sequential
-from keras.models import Model
-from keras.layers.core import Dense, Dropout, Activation, Flatten, Permute, Reshape, Lambda
-from keras.layers import Convolution1D, MaxPooling1D, GlobalAveragePooling1D, GlobalMaxPooling1D, RepeatVector, AveragePooling1D, LeakyReLU, BatchNormalization, GaussianNoise
-from keras.callbacks import ModelCheckpoint, LearningRateScheduler
+from keras.layers.core import Dense, Dropout
+from keras.layers import LeakyReLU, BatchNormalization
 from keras.optimizers import Adam
 from keras.metrics import BinaryAccuracy
 from keras.losses import BinaryCrossentropy
 from keras import Input
-from keras import regularizers
 
 from app.config import PARAMETERS
 

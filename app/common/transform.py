@@ -37,7 +37,6 @@ def calculateLabels_prev(dataframe):
   return dataframe
 
 def calculateLabels(dataframe):
-  counter = 0
   for i in range(len(dataframe)-3):
     if dataframe.loc[i, 'Close'] < dataframe.loc[i+3, 'Close']:
       if (dataframe.loc[i, 'Volume'] < dataframe.loc[i+3, 'Volume']):
