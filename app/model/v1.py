@@ -11,7 +11,7 @@ from keras import regularizers
 
 from app.config import PARAMETERS
 
-class PairSampleLabellerModel():
+class PairSampleLabellerV1Model():
   def __init__(self):
     self.model = Sequential()
     self.model.add(Input(shape=(PARAMETERS['input-scope'],6,)))

@@ -2,11 +2,10 @@ import numpy as np
 from app.config import PARAMETERS
 from app.model.v1 import PairSampleLabellerModel
 
-def performIncrementalInferenceLearning(dataset):
+def performIncrementalInferenceLearning(dataset, model):
   all_preds = []
-  pictogram = ""
+  # pictogram = ""
   wrong_count = false_positives = false_negatives = true_positives = 0
-  model = PairSampleLabellerModel()
   first_training_idx = PARAMETERS['input-scope']
   last_training_idx  = PARAMETERS['testing_offset'] - PARAMETERS['label-lookahead']
   trainingSamples, trainingLabels = dataset.getPackagedSamples(first_training_idx, last_training_idx, qtty=PARAMETERS['input-scope'])
@@ -34,6 +33,6 @@ def performIncrementalInferenceLearning(dataset):
     if wrong_count:
       print(f'> {(false_negatives/(false_positives+false_negatives)*100):.4f}% of errors are false negatives')
       print(f'> {(false_positives/(false_positives+false_negatives)*100):.4f}% of errors are false positives')
-    pictogram += "✅" if out==testingLabel else "❌"
+    # pictogram += "✅" if out==testingLabel else "❌"
     print('' + pictogram)
   return all_preds
