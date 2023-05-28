@@ -1,6 +1,5 @@
 import numpy as np
 from app.config import PARAMETERS
-from app.model.v1 import PairSampleLabellerModel
 
 def performIncrementalInferenceLearning(dataset, model):
   all_preds = []

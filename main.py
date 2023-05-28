@@ -19,7 +19,7 @@ def help():
 def main(argv):
   try:
     arguments, values = getopt.getopt(argv, "h", ["help"])
-    modeltype == "v1"
+    modelType = "v1"
     for currentArgunemt, currentValue in arguments:
       if currentArgunemt in ("-m", "--modeltype"):
         modelType = currentValue
