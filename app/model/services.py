@@ -7,9 +7,9 @@ def performIncrementalInferenceLearning(dataset):
   pictogram = ""
   wrong_count = false_positives = false_negatives = true_positives = 0
   model = PairSampleLabellerModel()
-  first_training_idx = 0
+  first_training_idx = PARAMETERS['input-scope']
   last_training_idx  = PARAMETERS['testing_offset'] - PARAMETERS['label-lookahead']
-  trainingSamples, trainingLabels = dataset.getPackagedSamples(first_training_idx, last_training_idx, qtty=PARAMETERS['label-lookahead'])
+  trainingSamples, trainingLabels = dataset.getPackagedSamples(first_training_idx, last_training_idx, qtty=PARAMETERS['input-scope'])
   print("> Started base model training")
   model.fit(trainingSamples, trainingLabels, numEpochs=PARAMETERS['initial-epochs'], verbose=2)
   print("> Finished base model training, performing inference and relearning...")
@@ -17,8 +17,8 @@ def performIncrementalInferenceLearning(dataset):
     last_training_idx  = sample_idx-PARAMETERS['label-lookahead']
     if (PARAMETERS['enable-sliding-window']):
       first_training_idx = last_training_idx - PARAMETERS['window-size']
-    trainingSamples, trainingLabels = dataset.getPackagedSamples(first_training_idx, last_training_idx, qtty=PARAMETERS['label-lookahead'])
-    testingSample,   testingLabel   = dataset.getPackagedSamples(sample_idx, sample_idx, qtty=PARAMETERS['label-lookahead'])
+    trainingSamples, trainingLabels = dataset.getPackagedSamples(first_training_idx, last_training_idx, qtty=PARAMETERS['input-scope'])
+    testingSample,   testingLabel   = dataset.getPackagedSamples(sample_idx, sample_idx, qtty=PARAMETERS['input-scope'])
     model.fit(trainingSamples, trainingLabels, numEpochs=PARAMETERS['epochs-per-sample'], verbose=0)
     prediction = model.predict(testingSample)
     out = int(bool(round(prediction.item(0)) > 0))
@@ -34,7 +34,6 @@ def performIncrementalInferenceLearning(dataset):
     if wrong_count:
       print(f'> {(false_negatives/(false_positives+false_negatives)*100):.4f}% of errors are false negatives')
       print(f'> {(false_positives/(false_positives+false_negatives)*100):.4f}% of errors are false positives')
-      print(f'F1-macro is {(true_positives/(true_positives+(false_positives+false_negatives)/2)/(sample_idx+1-PARAMETERS["testing_offset"])):.6f}')
     pictogram += "✅" if out==testingLabel else "❌"
     print('' + pictogram)
   return all_preds
