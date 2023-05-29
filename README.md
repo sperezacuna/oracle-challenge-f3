@@ -10,7 +10,7 @@ The main functionality of the project can be summarized as follows:
   * Fill missing or deleted high and low prices by inference using bayesian regression along each tuple (to not fall into [look-ahead bias](https://analyzingalpha.com/look-ahead-bias)).
   * Assert data coherence; if data is not consistent, adjust to min-max values.
   * Recalculate all incorrect labels according to APEX observatory analysis findings (further insights on this analysis can be found in _presentation.pdf_).
-* Merge the [training](https://challenges-asset-files.s3.us-east-2.amazonaws.com/0-challenges_data/2023_04/Oracle_3rd_challenge/training_set.csv) and [testing](https://challenges-asset-files.s3.us-east-2.amazonaws.com/0-challenges_data/2023_04/Oracle_3rd_challenge/testing.csv) datasets, and calculate all missing labels, which will serve the purpose of ground truth and **never be included in the training data** at any point in time **prior to its inference** with a margin of 3 days (as found by APEX insights on the data).
+* Merge the [training](https://challenges-asset-files.s3.us-east-2.amazonaws.com/0-challenges_data/2023_04/Oracle_3rd_challenge/training_set.csv) and [testing](https://challenges-asset-files.s3.us-east-2.amazonaws.com/0-challenges_data/2023_04/Oracle_3rd_challenge/testing_set.csv) datasets, and calculate all missing labels, which will serve the purpose of ground truth and **never be included in the training data** at any point in time **prior to its inference** with a margin of 3 days (as found by APEX insights on the data).
 * Create a basic (but deep) model as per the topology of a [MLP](https://en.wikipedia.org/wiki/Multilayer_perceptron).
 * Initially train the model with all data _(but three days)_ previous to the first testing sample.
 * For each following testing sample, use the current model to infer its label, giving it to the model along with a certain number of unlabeled contiguous previous samples. After that, go on with model training for a lesser amount of epochs with a lesser amount of data corresponding to the last N+1-3 days (which will serve the purposes of a sliding window of time).
@@ -65,7 +65,7 @@ conda activate <env>
 
 ## Execution
 
-Train a new model for continuous inference based on the [provided training dataset](https://challenges-asset-files.s3.us-east-2.amazonaws.com/0-challenges_data/2023_04/Oracle_3rd_challenge/training_set.csv) to infer the [provided testing dataset](https://challenges-asset-files.s3.us-east-2.amazonaws.com/0-challenges_data/2023_04/Oracle_3rd_challenge/testing.csv) using `main.py` script. You may specify the following parameters:
+Train a new model for continuous inference based on the [provided training dataset](https://challenges-asset-files.s3.us-east-2.amazonaws.com/0-challenges_data/2023_04/Oracle_3rd_challenge/training_set.csv) to infer the [provided testing dataset](https://challenges-asset-files.s3.us-east-2.amazonaws.com/0-challenges_data/2023_04/Oracle_3rd_challenge/testing_set.csv) using `main.py` script. You may specify the following parameters:
     
 `-m MODELTYPE`, to establish the base binary-classification model type, either:
 
