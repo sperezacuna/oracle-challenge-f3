@@ -1,13 +1,13 @@
 ## About The Project
 
-This is an EUR/USD pair markey dynamics prediction model based on deep neural networks built under the specification for the third challenge of the contest [Reto Enseña Oracle](https://nuwe.io/dev/competitions/reto-ensena-oracle-espana/modelo-predictivo-reto-3), hence the generated model will be capable identifying a 3-day-ahead market evolution indicator given a set of historic (strictly previous) data.
+This is an EUR/USD pair market dynamics prediction model based on deep neural networks built under the specification for the third challenge of the contest [Reto Enseña Oracle](https://nuwe.io/dev/competitions/reto-ensena-oracle-espana/modelo-predictivo-reto-3), hence the generated model will be capable identifying a 3-day-ahead market evolution indicator given a set of historic (strictly preceding) data.
 
 The main functionality of the project can be summarized as follows:
 
 * Clean the [provided training dataset](https://challenges-asset-files.s3.us-east-2.amazonaws.com/0-challenges_data/2023_04/Oracle_3rd_challenge/training_set.csv), particularly:
   * Delete outliers, implementing [interquartile range](https://en.wikipedia.org/wiki/Interquartile_range) as base indicator.
   * Fill missing open (close) data transitively with following (previous) day close (open) value.
-  * Fill missing or deleted high and low prices by inference using bayesian regression along each tuple (to no fall into [look-ahead bias](https://analyzingalpha.com/look-ahead-bias)).
+  * Fill missing or deleted high and low prices by inference using bayesian regression along each tuple (to not fall into [look-ahead bias](https://analyzingalpha.com/look-ahead-bias)).
   * Assert data coherence; if data is not consistent, adjust to min-max values.
   * Recalculate all incorrect labels according to APEX observatory analysis findings (further insights on this analysis can be found in _presentation.pdf_).
 * Merge the [training](https://challenges-asset-files.s3.us-east-2.amazonaws.com/0-challenges_data/2023_04/Oracle_3rd_challenge/training_set.csv) and [testing](https://challenges-asset-files.s3.us-east-2.amazonaws.com/0-challenges_data/2023_04/Oracle_3rd_challenge/testing.csv) datasets, and calculate all missing labels, which will serve the purpose of ground truth and **never be included in the training data** at any point in time **prior to its inference** with a margin of 3 days (as found by APEX insights on the data).
@@ -74,7 +74,7 @@ Train a new model for continuous inference based on the [provided training datas
 `--help`, to show the help message for the script.
 
 The model script will generate the results.json file containing the inferred labels for the testing dataset, which will be saved at _results/`MODELTYPE`_, along with
-  - The ground truth for the testing dataset, according to insight on how the labels are calculated, which have prroved to be truthy, saved at _data/processed/full_set.csv_.
+  - The ground truth for the testing dataset, according to insight on how the labels are calculated, which have proved to be truthy, saved at _data/processed/full_set.csv_.
   - The full dataset, including testing and training data, along with its labels, saved at _results/ground-truth.json_.
 
 (along with a graph of training statistics) will be saved at _models/`MODELTYPE`_
@@ -84,7 +84,7 @@ Example:
 python main.py -m v1
 ```
 
-> As the model creations is directly dependent on the testing dataset used for inference (although only to data prior to each inference sample, in any given moment), we cannot this time provide a model pretrained by us.
+> As the model creations is directly dependent on the testing dataset used for inference (although only to data prior to each inference sample, in any given moment), we cannot currently provide a model pre-trained by us.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
