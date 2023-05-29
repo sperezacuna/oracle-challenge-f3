@@ -77,8 +77,6 @@ The model script will generate the results.json file containing the inferred lab
   - The ground truth for the testing dataset, according to insight on how the labels are calculated, which have proved to be truthy, saved at _data/processed/full_set.csv_.
   - The full dataset, including testing and training data, along with its labels, saved at _results/ground-truth.json_.
 
-(along with a graph of training statistics) will be saved at _models/`MODELTYPE`_
-
 Example:
 ```bash
 python main.py -m v1
